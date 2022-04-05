@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ImageButton.CircleButton" parent="Widget.AppCompat.ImageButton">
+        <item name="android:layout_width">@dimen/dp_40</item>
+        <item name="android:layout_height">@dimen/dp_40</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:background">?selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="ImageButton.ToolBarActionButton" parent="ImageButton.CircleButton">
+        <item name="android:layout_margin">@dimen/dp_8</item>
+    </style>
+
+    <style name="TextView.Toolbar.Title" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/text_color_primary</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="BottomNavigationViewItem">
+        <item name="android:textSize">@dimen/sp_11</item>
+    </style>
+
+    <style name="TextView.Default" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/text_color_primary</item>
+        <item name="android:textSize">@dimen/sp_14</item>
+    </style>
+
+    <style name="TextView.H1" parent="TextView.Default">
+        <item name="android:textSize">@dimen/sp_22</item>
+    </style>
+
+    <style name="TextView.H2" parent="TextView.Default">
+        <item name="android:textSize">@dimen/sp_18</item>
+    </style>
+
+    <style name="TextView.H3" parent="TextView.Default">
+        <item name="android:textSize">@dimen/sp_16</item>
+    </style>
+
+    <style name="TextView.Small" parent="TextView.Default">
+        <item name="android:textSize">@dimen/sp_12</item>
+    </style>
+
+    <style name="MaterialButton.Default" parent="Widget.MaterialComponents.Button">
+        <item name="android:insetLeft">@dimen/dp_0</item>
+        <item name="android:insetTop">@dimen/dp_0</item>
+        <item name="android:insetRight">@dimen/dp_0</item>
+        <item name="android:insetBottom">@dimen/dp_0</item>
+        <item name="android:textColor">@color/button_text_color</item>
+        <item name="elevation">@dimen/dp_0</item>
+        <item name="iconTint">@color/text_color_primary</item>
+        <item name="android:backgroundTint">@color/button_background_color</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceButton</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+</resources>

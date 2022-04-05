@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_unknown">Неизвестная ошибка, попробуйте позднее.</string>
+    <string name="error_connection">Ошибка подключения к серверу, попробуйте позднее.</string>
+
+    <string name="menu_test">Тест</string>
+
+    <string name="description_back">Вернуться назад</string>
+    <string name="need_permissions">Необходимо предоставить разрешения</string>
+    <string name="unknown_error">Ошибка, повторите позднее</string>
+    <string name="remaining">Загружено: %.2f МБ / %.2f МБ (%d/%d)</string>
+    <string name="file_uploaded">Файл успешно загружен</string>
+    <string name="file_not_uploaded">Произошла ошибка при загрузке файла</string>
+</resources>

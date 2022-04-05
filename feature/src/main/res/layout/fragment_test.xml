@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_primary"
+    tools:context=".test.presentation.TestFragment">
+
+    <include
+        android:id="@+id/frg_test__layout_toolbar"
+        layout="@layout/include_toolbar"
+        android:visibility="gone"/>
+
+    <ProgressBar
+        android:id="@+id/frg_test__progress_bar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progressTint="@color/background_primary_dark"
+        android:max="100"
+        tools:progress="40"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/frg_test__tv_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="@dimen/sp_14"
+        android:textColor="@color/text_color_primary"
+        android:text="@string/remaining"
+        app:layout_constraintTop_toBottomOf="@id/frg_test__progress_bar"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/frg_test__fab_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_24"
+        android:background="@color/white"
+        android:src="@drawable/ic_add_24"
+        app:backgroundTint="@color/background_primary_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/frg_test__rv_list"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:layout_marginTop="@dimen/dp_10"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frg_test__tv_progress"
+        tools:listitem="@layout/item_test" />
+</androidx.constraintlayout.widget.ConstraintLayout>
