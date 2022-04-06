@@ -53,6 +53,8 @@ buildscript {
         rxJava3Version = '3.0.7'
         rxKotlin3Version = '3.0.0'
 
+        uploadServiceVersion = '4.7.0'
+
         kotlinDep = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
         androidxCoreDep = "androidx.core:core-ktx:$coreVersion"
@@ -108,6 +110,8 @@ buildscript {
         rxAndroid3Dep = "io.reactivex.rxjava3:rxandroid:$rxAndroid3Version"
         rxJava3Dep = "io.reactivex.rxjava3:rxjava:$rxJava3Version"
         rxKotlin3Dep = "io.reactivex.rxjava3:rxkotlin:$rxKotlin3Version"
+
+        uploadServiceDep = "net.gotev:uploadservice:$uploadServiceVersion"
     }
 
     ext.kotlin_version = "1.5.30"

@@ -78,5 +78,5 @@ dependencies {
 
     implementation coilDep
     implementation matisseDep
-    implementation 'net.gotev:uploadservice:4.7.0'
+    implementation uploadServiceDep
 }

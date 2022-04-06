@@ -109,5 +109,6 @@ dependencies {
     implementation rxAndroid3Dep
     implementation rxJava3Dep
     implementation rxKotlin3Dep
-    implementation 'net.gotev:uploadservice:4.7.0'
+
+    implementation uploadServiceDep
 }

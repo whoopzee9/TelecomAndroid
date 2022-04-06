@@ -13,7 +13,7 @@ object FilesHelper {
     const val CHILD_DIR = "uploads"
     private val TAG = FilesHelper::class.simpleName
 
-    private fun createCacheFolder(context: Context): File {
+    fun createCacheFolder(context: Context): File {
         return File(context.cacheDir, CHILD_DIR).also { cacheDir ->
             if (!cacheDir.exists()) {
                 cacheDir.mkdirs()

@@ -9,7 +9,7 @@ import ru.spbstu.feature.databinding.ItemTestBinding
 import ru.spbstu.feature.domain.model.FilesModel
 
 
-class FilesNamesAdapter(val onItemClick: (Long) -> Unit) :
+class FilesNamesAdapter(val onItemClick: (String) -> Unit) :
     BaseAdapter<FilesModel, FilesNamesAdapter.TestViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TestViewHolder =
@@ -22,7 +22,7 @@ class FilesNamesAdapter(val onItemClick: (Long) -> Unit) :
 
         init {
             binding.root.setDebounceClickListener {
-                onItemClick(item.id)
+                onItemClick(item.name)
             }
         }
 

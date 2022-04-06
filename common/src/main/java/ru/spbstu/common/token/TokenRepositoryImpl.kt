@@ -26,6 +26,14 @@ class TokenRepositoryImpl @Inject constructor(
         sharedPreferences.edit().putString(REFRESH_KEY, refresh).apply()
     }
 
+    override fun saveDownloadId(fileName: String, downloadId: Long) {
+        sharedPreferences.edit().putLong(fileName, downloadId).apply()
+    }
+
+    override fun getDownloadId(fileName: String): Long {
+        return sharedPreferences.getLong(fileName, 0)
+    }
+
     private companion object {
         private const val TOKEN_KEY = "ru.spbstu.telecom.TokenRepositoryImpl.token"
         private const val REFRESH_KEY = "ru.spbstu.telecom.TokenRepositoryImpl.refresh"

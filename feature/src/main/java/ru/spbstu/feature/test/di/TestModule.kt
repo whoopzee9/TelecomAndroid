@@ -8,8 +8,10 @@ import dagger.Provides
 import dagger.multibindings.IntoMap
 import ru.spbstu.common.di.viewmodel.ViewModelKey
 import ru.spbstu.common.di.viewmodel.ViewModelModule
+import ru.spbstu.common.token.TokenRepository
 import ru.spbstu.feature.FeatureRouter
 import ru.spbstu.feature.domain.usecase.GetFilesNamesUseCase
+import ru.spbstu.feature.domain.usecase.UploadFileInServiceUseCase
 import ru.spbstu.feature.domain.usecase.UploadFileUseCase
 import ru.spbstu.feature.test.presentation.TestViewModel
 
@@ -26,9 +28,17 @@ class TestModule {
     fun provideViewModel(
         router: FeatureRouter,
         getFilesNamesUseCase: GetFilesNamesUseCase,
-        uploadFileUseCase: UploadFileUseCase
+        uploadFileUseCase: UploadFileUseCase,
+        uploadFilesInServiceUseCase: UploadFileInServiceUseCase,
+        tokenRepository: TokenRepository
     ): ViewModel {
-        return TestViewModel(router, getFilesNamesUseCase, uploadFileUseCase)
+        return TestViewModel(
+            router,
+            getFilesNamesUseCase,
+            uploadFileUseCase,
+            uploadFilesInServiceUseCase,
+            tokenRepository
+        )
     }
 
     @Provides

@@ -11,4 +11,14 @@
     <string name="remaining">Загружено: %.2f МБ / %.2f МБ (%d/%d)</string>
     <string name="file_uploaded">Файл успешно загружен</string>
     <string name="file_not_uploaded">Произошла ошибка при загрузке файла</string>
+    <string name="upload_error">Возникла ошибка во время загрузки</string>
+    <string name="upload_canceled">Загрузка отменена</string>
+    <string name="cancel">Отмена</string>
+    <string name="uploading_files">Загрузка файла(ов)</string>
+    <string name="bit_per_second">бит/с</string>
+    <string name="kilobit_per_second">Кбит/с</string>
+    <string name="mbit_per_second">Мбит/с</string>
+    <string name="loading">Загрузка: [[UPLOAD_RATE]] ([[PROGRESS]])</string>
+    <string name="upload_completed_in">Загрузка завершена успешно за [[ELAPSED_TIME]]</string>
+    <string name="select_application">Открыть с помощью</string>
 </resources>
