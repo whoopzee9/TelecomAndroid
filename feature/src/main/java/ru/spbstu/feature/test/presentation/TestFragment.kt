@@ -13,17 +13,21 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
-import androidx.core.net.toFile
 import androidx.core.net.toUri
-import com.zhihu.matisse.BuildConfig.APPLICATION_ID
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.ui.MatisseActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import ru.spbstu.common.BuildConfig
 import ru.spbstu.common.di.FeatureUtils
 import ru.spbstu.common.extenstions.getFileName
-import ru.spbstu.common.extenstions.getMimeType
 import ru.spbstu.common.extenstions.setDebounceClickListener
+import ru.spbstu.common.extenstions.setLightStatusBar
+import ru.spbstu.common.extenstions.setStatusBarColor
 import ru.spbstu.common.extenstions.viewBinding
 import ru.spbstu.common.utils.CoilImageEngine
 import ru.spbstu.common.utils.PermissionUtils
@@ -60,11 +64,16 @@ class TestFragment : ToolbarFragment<TestViewModel>(
 
     override fun setupViews() {
         super.setupViews()
+        requireActivity().setStatusBarColor(R.color.background_secondary)
+        requireView().setLightStatusBar()
         initAdapter()
         binding.frgTestFabAdd.setDebounceClickListener {
             requestAndSelectPhoto()
         }
-        viewModel.getFilesNames()
+        binding.frgTestSrlRefresh.setOnRefreshListener {
+            viewModel.getFilesNames(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS))
+        }
+        viewModel.getFilesNames(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS))
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode != 0) {
@@ -130,6 +139,30 @@ class TestFragment : ToolbarFragment<TestViewModel>(
         viewModel.filesUploadState.observe {
             handleFilesUploadState(it)
         }
+        viewModel.state.observe {
+            handleState(it)
+        }
+    }
+
+    private fun handleState(state: TestViewModel.ResponseState) {
+        when (state) {
+            is TestViewModel.ResponseState.Failure -> {
+                binding.frgTestPbProgress.visibility = View.GONE
+                binding.frgTestSrlRefresh.isRefreshing = false
+            }
+            TestViewModel.ResponseState.Initial -> {
+                binding.frgTestPbProgress.visibility = View.GONE
+                binding.frgTestSrlRefresh.isRefreshing = false
+            }
+            TestViewModel.ResponseState.Processing -> {
+                binding.frgTestPbProgress.visibility = View.VISIBLE
+                binding.frgTestSrlRefresh.isRefreshing = false
+            }
+            TestViewModel.ResponseState.Success -> {
+                binding.frgTestPbProgress.visibility = View.GONE
+                binding.frgTestSrlRefresh.isRefreshing = false
+            }
+        }
     }
 
     private fun handleFilesUploadState(state: TestViewModel.FileUploadState) {
@@ -139,6 +172,7 @@ class TestFragment : ToolbarFragment<TestViewModel>(
                 binding.frgTestProgressBar.progress = 100
                 binding.frgTestTvProgress.visibility = View.VISIBLE
                 Toast.makeText(requireContext(), R.string.file_uploaded, Toast.LENGTH_SHORT).show()
+                viewModel.getFilesNames(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS))
             }
             TestViewModel.FileUploadState.Initial -> {
                 binding.frgTestProgressBar.visibility = View.GONE
@@ -161,14 +195,22 @@ class TestFragment : ToolbarFragment<TestViewModel>(
         adapter = FilesNamesAdapter {
             val cachePath = FilesHelper.createCacheFolder(requireContext())
 
-            val file = File(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), it)
+            val file =
+                File(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), it)
 
             val uri = FileProvider.getUriForFile(requireContext(), BuildConfig.AUTHORITY, file)
 
+            val orig = File(viewModel.getOriginalFilePath(it))
 
-
-            if (file.exists()) {
-                openFileIntent(uri)
+            if (file.exists() || orig.exists()) {
+                //openFileIntent(uri)
+                openFileIntent(
+                    FileProvider.getUriForFile(
+                        requireContext(),
+                        BuildConfig.AUTHORITY,
+                        if (file.exists()) file else orig
+                    )
+                )
             } else {
                 val downloadRequest =
                     DownloadManager.Request(Uri.parse("${BuildConfig.ENDPOINT}/file/download/$it"))
@@ -176,14 +218,26 @@ class TestFragment : ToolbarFragment<TestViewModel>(
                         .setTitle("Telecom")
                         .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
                         .setVisibleInDownloadsUi(false)
-                        .setDestinationUri(uri)
-                        //.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, it)
+                        .setDestinationUri(file.toUri())
+                //.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, it)
                 val downloadId = downloadManager.enqueue(downloadRequest)
-
+                viewModel.setStates(it, true, true)
+                getDMStatus(downloadId, it, uri)
                 viewModel.saveDownloadId(it, downloadId)
             }
         }
         binding.frgTestRvList.adapter = adapter
+        binding.frgTestRvList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (viewModel.filesNames.value.isEmpty()) return
+                if (dy < 0.01) {
+                    binding.frgTestFabAdd.show()
+                } else {
+                    binding.frgTestFabAdd.hide()
+                }
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
     }
 
     private fun openFileIntent(uri: Uri) {
@@ -197,24 +251,36 @@ class TestFragment : ToolbarFragment<TestViewModel>(
         startActivity(Intent.createChooser(openFileIntent, getString(R.string.select_application)))
     }
 
-    private fun getDMStatus(downloadId: Long): Int? {
+    private fun getDMStatus(downloadId: Long, fileName: String, destUri: Uri) {
         val request = DownloadManager.Query()
             .setFilterById(downloadId)
-        downloadManager.query(request).use {
-            return if (it.count > 0) {
-                it.getInt(it.getColumnIndex(DownloadManager.COLUMN_STATUS))
-            } else null
-        }
-    }
-
-    private fun checkDMStatus(fileName: String) {
-        val downloadId = viewModel.getDownloadId(fileName)
-        val status = getDMStatus(downloadId)
-        when (status) {
-            DownloadManager.STATUS_FAILED -> {
-                //download again
+        lifecycleScope.launch(Dispatchers.IO) {
+            while (true) {
+                downloadManager.query(request).use {
+                    if (it.moveToFirst()) {
+                        if (it.getColumnIndex(DownloadManager.COLUMN_STATUS) != -1) {
+                            val status = it.getInt(it.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                            when (status) {
+                                DownloadManager.STATUS_FAILED -> {
+                                    //download again
+                                    viewModel.setStates(fileName, false, false)
+                                }
+                                DownloadManager.STATUS_PENDING,
+                                DownloadManager.STATUS_RUNNING,
+                                DownloadManager.STATUS_PAUSED -> {
+                                    Log.d("qwerty", "progress")
+                                    viewModel.setStates(fileName, true, true)
+                                }
+                                DownloadManager.STATUS_SUCCESSFUL -> {
+                                    Log.d("qwerty", "success")
+                                    viewModel.setStates(fileName, false, true)
+                                    this.cancel()
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            DownloadManager.STATUS_
         }
     }
 

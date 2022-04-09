@@ -56,4 +56,22 @@
         <item name="android:textAppearance">?android:attr/textAppearanceButton</item>
         <item name="android:textAllCaps">false</item>
     </style>
+
+    <style name="MaterialCardView.Code" parent="Widget.MaterialComponents.CardView">
+        <item name="android:backgroundTint">@color/background_primary</item>
+        <item name="strokeWidth">@dimen/dp_1</item>
+        <item name="strokeColor">@color/text_color_primary</item>
+        <item name="cardCornerRadius">@dimen/dp_35</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="PFCheckBox">
+        <item name="android:checkboxStyle">@style/PFLockScreenCodeStyle</item>
+        <item name="checkboxStyle">@style/PFLockScreenCodeStyle</item>
+    </style>
+
+    <style name="PFLockScreenCodeStyle">
+        <item name="android:button">@drawable/checkbox</item>
+    </style>
 </resources>

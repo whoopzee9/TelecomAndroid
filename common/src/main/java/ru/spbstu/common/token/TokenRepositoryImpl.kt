@@ -34,8 +34,25 @@ class TokenRepositoryImpl @Inject constructor(
         return sharedPreferences.getLong(fileName, 0)
     }
 
+    override fun saveFileOriginalPath(fileName: String, uriStr: String) {
+        sharedPreferences.edit().putString(fileName, uriStr).apply()
+    }
+
+    override fun getFileOriginalPath(fileName: String): String {
+        return sharedPreferences.getString(fileName, "") ?: ""
+    }
+
+    override fun setAuthCode(code: String) {
+        sharedPreferences.edit().putString(AUTH_KEY, code).apply()
+    }
+
+    override fun getAuthCode(): String {
+        return sharedPreferences.getString(AUTH_KEY, "") ?: ""
+    }
+
     private companion object {
         private const val TOKEN_KEY = "ru.spbstu.telecom.TokenRepositoryImpl.token"
         private const val REFRESH_KEY = "ru.spbstu.telecom.TokenRepositoryImpl.refresh"
+        private const val AUTH_KEY = "ru.spbstu.telecom.TokenRepositoryImpl.auth"
     }
 }

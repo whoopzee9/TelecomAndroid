@@ -21,4 +21,18 @@
     <string name="loading">Загрузка: [[UPLOAD_RATE]] ([[PROGRESS]])</string>
     <string name="upload_completed_in">Загрузка завершена успешно за [[ELAPSED_TIME]]</string>
     <string name="select_application">Открыть с помощью</string>
+    <string name="digit_1">1</string>
+    <string name="digit_2">2</string>
+    <string name="digit_3">3</string>
+    <string name="digit_4">4</string>
+    <string name="digit_5">5</string>
+    <string name="digit_6">6</string>
+    <string name="digit_7">7</string>
+    <string name="digit_8">8</string>
+    <string name="digit_9">9</string>
+    <string name="digit_0">0</string>
+    <string name="login">Войдите</string>
+    <string name="create_code">Придумайте код</string>
+    <string name="successful_login">Успешный вход!</string>
+    <string name="wrong_code">Неверный код!</string>
 </resources>

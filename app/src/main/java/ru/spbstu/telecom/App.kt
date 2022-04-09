@@ -5,7 +5,10 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.os.Build
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.viewbinding.BuildConfig
 import net.gotev.uploadservice.UploadServiceConfig
 import net.gotev.uploadservice.data.UploadElapsedTime
@@ -26,7 +29,7 @@ import ru.spbstu.telecom.log.ReleaseTree
 import timber.log.Timber
 import javax.inject.Inject
 
-open class App: Application(), FeatureContainer {
+open class App : Application(), FeatureContainer {
 
     @Inject
     lateinit var featureHolderManager: FeatureHolderManager
@@ -37,9 +40,9 @@ open class App: Application(), FeatureContainer {
         super.onCreate()
 
         appComponent = DaggerAppComponent
-                .builder()
-                .application(this)
-                .build()
+            .builder()
+            .application(this)
+            .build()
 
         appComponent.inject(this)
 
@@ -63,6 +66,9 @@ open class App: Application(), FeatureContainer {
                 isRingToneEnabled = true,
                 progress = UploadNotificationStatusConfig(
                     title = title,
+                    iconResourceID = ru.spbstu.common.R.drawable.ic_download_24,
+                    iconColorResourceID = ContextCompat.getColor(context, ru.spbstu.common.R.color.background_primary),
+                    largeIcon = BitmapFactory.decodeResource(resources, ru.spbstu.common.R.drawable.ic_download_24),
                     message = getString(ru.spbstu.telecom.R.string.loading),
                     actions = arrayListOf(
                         UploadNotificationAction(
@@ -74,20 +80,29 @@ open class App: Application(), FeatureContainer {
                 ),
                 success = UploadNotificationStatusConfig(
                     title = title,
+                    iconResourceID = ru.spbstu.common.R.drawable.ic_download_24,
+                    iconColorResourceID = ContextCompat.getColor(context, ru.spbstu.common.R.color.background_primary),
+                    largeIcon = BitmapFactory.decodeResource(resources, ru.spbstu.common.R.drawable.ic_download_24),
                     message = getString(ru.spbstu.telecom.R.string.upload_completed_in)
                 ),
                 error = UploadNotificationStatusConfig(
                     title = title,
+                    iconResourceID = ru.spbstu.common.R.drawable.ic_download_24,
+                    iconColorResourceID = ContextCompat.getColor(context, ru.spbstu.common.R.color.background_primary),
+                    largeIcon = BitmapFactory.decodeResource(resources, ru.spbstu.common.R.drawable.ic_download_24),
                     message = getString(ru.spbstu.telecom.R.string.upload_error)
                 ),
                 cancelled = UploadNotificationStatusConfig(
                     title = title,
+                    iconResourceID = ru.spbstu.common.R.drawable.ic_download_24,
+                    iconColorResourceID = ContextCompat.getColor(context, ru.spbstu.common.R.color.background_primary),
+                    largeIcon = BitmapFactory.decodeResource(resources, ru.spbstu.common.R.drawable.ic_download_24),
                     message = getString(ru.spbstu.telecom.R.string.upload_canceled)
                 )
             )
         }
 
-        UploadServiceConfig.placeholdersProcessor = object: PlaceholdersProcessor {
+        UploadServiceConfig.placeholdersProcessor = object : PlaceholdersProcessor {
             fun uploadElapsedTime(uploadElapsedTime: UploadElapsedTime) = when {
                 uploadElapsedTime.minutes == 0 -> "${uploadElapsedTime.seconds} сек"
                 else -> "${uploadElapsedTime.minutes} мин ${uploadElapsedTime.seconds} сек"
@@ -119,7 +134,10 @@ open class App: Application(), FeatureContainer {
                 val remainingFiles = totalFiles - uploadedFiles
 
                 return safeMessage
-                    .replace(Placeholder.ElapsedTime.value, uploadElapsedTime(uploadInfo.elapsedTime))
+                    .replace(
+                        Placeholder.ElapsedTime.value,
+                        uploadElapsedTime(uploadInfo.elapsedTime)
+                    )
                     .replace(Placeholder.UploadRate.value, uploadRate(uploadInfo.uploadRate))
                     .replace(Placeholder.Progress.value, uploadProgress(uploadInfo.progressPercent))
                     .replace(Placeholder.UploadedFiles.value, uploadedFiles(uploadedFiles))

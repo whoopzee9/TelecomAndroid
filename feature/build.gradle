@@ -64,6 +64,7 @@ dependencies {
     implementation gsonDep
 
     implementation timberDep
+    implementation swipeRefreshLayoutDep
 
     implementation coroutinesDep
     implementation coroutinesAndroidDep
@@ -79,4 +80,7 @@ dependencies {
     implementation coilDep
     implementation matisseDep
     implementation uploadServiceDep
+    
+    implementation lockScreenDep
+    implementation biometricDep
 }

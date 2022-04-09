@@ -7,6 +7,7 @@ import androidx.navigation.NavDestination
 import org.greenrobot.eventbus.EventBus
 import ru.spbstu.common.events.SetBottomNavVisibility
 import ru.spbstu.feature.FeatureRouter
+import ru.spbstu.telecom.R
 
 class Navigator : FeatureRouter {
 
@@ -39,6 +40,12 @@ class Navigator : FeatureRouter {
 
     fun detachNavController() {
         navController = null
+    }
+
+    override fun openMainFragment() {
+        when (navController?.currentDestination?.id) {
+            R.id.authFragment -> navController?.navigate(R.id.action_authFragment_to_testFragment)
+        }
     }
 
     fun checkBottomBar() {

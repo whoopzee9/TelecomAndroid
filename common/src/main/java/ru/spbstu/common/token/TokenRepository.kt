@@ -7,4 +7,8 @@ interface TokenRepository {
     fun saveRefresh(refresh: String)
     fun saveDownloadId(fileName: String, downloadId: Long)
     fun getDownloadId(fileName: String): Long
+    fun saveFileOriginalPath(fileName: String, uriStr: String)
+    fun getFileOriginalPath(fileName: String): String
+    fun setAuthCode(code: String)
+    fun getAuthCode(): String
 }

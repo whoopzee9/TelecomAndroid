@@ -46,7 +46,7 @@ class TestViewModel(
 
     var currentFile = 0
 
-    fun getFilesNames() {
+    fun getFilesNames(dirFile: File?) {
         _state.value = ResponseState.Processing
         getFilesNamesUseCase.invoke()
             .subscribeOn(Schedulers.io())
@@ -54,8 +54,20 @@ class TestViewModel(
             .subscribe({
                 when (it) {
                     is TelecomResult.Success -> {
+                        val namesList = mutableListOf<String>()
+                        dirFile?.listFiles()?.forEach { file ->
+                            namesList.add(file.name)
+                        }
                         _filesNames.value =
-                            it.data.mapIndexed { index, s -> FilesModel(index.toLong(), s) }
+                            it.data.mapIndexed { index, s ->
+                                val orig = File(tokenRepository.getFileOriginalPath(s))
+                                FilesModel(
+                                    index.toLong(),
+                                    s,
+                                    false,
+                                    namesList.contains(s) || orig.exists()
+                                )
+                            }
                         _state.value = ResponseState.Success
                     }
                     is TelecomResult.Error -> {
@@ -70,7 +82,6 @@ class TestViewModel(
     }
 
     fun uploadFile(file: File, callback: (Int, Long, Long) -> Unit) {
-        _state.value = ResponseState.Processing
         _filesUploadState.value = FileUploadState.Processing
         currentFile = filesList.indexOf(file) + 1
         uploadFileUseCase.invoke(file, callback)
@@ -80,11 +91,9 @@ class TestViewModel(
                 when (it) {
                     is TelecomResult.Success -> {
                         _filesUploadState.value = FileUploadState.FileLoadedSuccess
-                        _state.value = ResponseState.Success
                         uploadNextPhotoIfExist(file, callback)
                     }
                     is TelecomResult.Error -> {
-                        _state.value = ResponseState.Failure(it.error)
                         _filesUploadState.value = FileUploadState.Failure(it.error)
                         Timber.tag(TAG).i(it.error.toString())
                     }
@@ -99,7 +108,7 @@ class TestViewModel(
         val index = filesList.indexOf(file)
         if (index + 1 >= filesList.size) {
             _filesUploadState.value = FileUploadState.FileLoadedSuccess
-            getFilesNames()
+            //getFilesNames()
         } else {
             uploadFile(filesList[index + 1], callback)
         }
@@ -111,7 +120,6 @@ class TestViewModel(
         lifecycleOwner: LifecycleOwner,
         callback: (Int, Long, Long) -> Unit
     ) {
-        _state.value = ResponseState.Processing
         _filesUploadState.value = FileUploadState.Processing
         currentFile = filesList.indexOf(file) + 1
         uploadFilesInServiceUseCase.invoke(
@@ -130,7 +138,6 @@ class TestViewModel(
                     exception: Throwable
                 ) {
                     Timber.tag(TAG).e(exception)
-                    _state.value = ResponseState.Failure(ResponseError.UnknownError)
                     _filesUploadState.value = FileUploadState.Failure(ResponseError.UnknownError)
                 }
 
@@ -147,9 +154,8 @@ class TestViewModel(
                     uploadInfo: UploadInfo,
                     serverResponse: ServerResponse
                 ) {
+                    tokenRepository.saveFileOriginalPath(file.name, file.absolutePath)
                     _filesUploadState.value = FileUploadState.FileLoadedSuccess
-                    _state.value = ResponseState.Success
-                    getFilesNames()
                 }
 
             })
@@ -166,6 +172,20 @@ class TestViewModel(
 
     fun getDownloadId(fileName: String): Long {
         return tokenRepository.getDownloadId(fileName)
+    }
+
+    fun getOriginalFilePath(fileName: String): String {
+        return tokenRepository.getFileOriginalPath(fileName)
+    }
+
+    fun setStates(fileName: String, isLoading: Boolean, isExist: Boolean) {
+        _filesNames.value = filesNames.value.map {
+            if (it.name == fileName) {
+                it.copy(isLoading = isLoading, isExist = isExist)
+            } else {
+                it
+            }
+        }
     }
 
     sealed class FileUploadState {

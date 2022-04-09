@@ -1,5 +1,6 @@
 package ru.spbstu.feature.test.presentation.adapter
 
+import android.view.View
 import android.view.ViewGroup
 import ru.spbstu.common.base.BaseAdapter
 import ru.spbstu.common.base.BaseViewHolder
@@ -29,6 +30,8 @@ class FilesNamesAdapter(val onItemClick: (String) -> Unit) :
         override fun bind(item: FilesModel) {
             this.item = item
             binding.itemTestTvText.text = item.name
+            binding.itemTestIvDownload.visibility = if (item.isExist) View.GONE else View.VISIBLE
+            binding.itemTestPbProgress.visibility = if (item.isLoading) View.VISIBLE else View.GONE
         }
     }
 }
