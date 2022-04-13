@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_unknown">Неизвестная ошибка, попробуйте позднее.</string>
+    <string name="error_connection">Ошибка подключения к серверу, попробуйте позднее.</string>
+
+    <string name="menu_test">Тест</string>
+
+    <string name="description_back">Вернуться назад</string>
+    <string name="need_permissions">Необходимо предоставить разрешения</string>
+    <string name="unknown_error">Ошибка, повторите позднее</string>
+    <string name="remaining">Загружено: %.2f МБ / %.2f МБ (%d/%d)</string>
+    <string name="file_uploaded">Файл успешно загружен</string>
+    <string name="file_not_uploaded">Произошла ошибка при загрузке файла</string>
+    <string name="upload_error">Возникла ошибка во время загрузки</string>
+    <string name="upload_canceled">Загрузка отменена</string>
+    <string name="cancel">Отмена</string>
+    <string name="uploading_files">Загрузка файла(ов)</string>
+    <string name="bit_per_second">бит/с</string>
+    <string name="kilobit_per_second">Кбит/с</string>
+    <string name="mbit_per_second">Мбит/с</string>
+    <string name="loading">Загрузка: [[UPLOAD_RATE]] ([[PROGRESS]])</string>
+    <string name="upload_completed_in">Загрузка завершена успешно за [[ELAPSED_TIME]]</string>
+    <string name="select_application">Открыть с помощью</string>
+    <string name="digit_1">1</string>
+    <string name="digit_2">2</string>
+    <string name="digit_3">3</string>
+    <string name="digit_4">4</string>
+    <string name="digit_5">5</string>
+    <string name="digit_6">6</string>
+    <string name="digit_7">7</string>
+    <string name="digit_8">8</string>
+    <string name="digit_9">9</string>
+    <string name="digit_0">0</string>
+    <string name="login">Войдите</string>
+    <string name="create_code">Придумайте код</string>
+    <string name="successful_login">Успешный вход!</string>
+    <string name="wrong_code">Неверный код!</string>
+    <string name="retry">Повторить</string>
+</resources>

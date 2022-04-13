@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/authFragment">
+
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="ru.spbstu.feature.test.presentation.TestFragment"
+        android:label="TestFragment"
+        tools:layout="@layout/fragment_test" />
+
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="ru.spbstu.feature.auth.presentation.AuthFragment"
+        android:label="AuthFragment"
+        tools:layout="@layout/fragment_auth" >
+        <action
+            android:id="@+id/action_authFragment_to_testFragment"
+            app:destination="@id/testFragment"
+            app:enterAnim="@anim/open_fragment_slide_right"
+            app:exitAnim="@anim/close_fragment_slide_left"
+            app:popEnterAnim="@anim/open_fragment_slide_left"
+            app:popExitAnim="@anim/close_fragment_slide_right"
+            app:popUpTo="@id/authFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

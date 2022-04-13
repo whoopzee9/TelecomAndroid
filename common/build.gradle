@@ -1,0 +1,94 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode versionCode
+        versionName versionName
+
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "String", "AUTHORITY", "\"ru.spbstu.telecom.provider\""
+            buildConfigField "String", "ENDPOINT", "\"https://a307-31-134-188-195.ngrok.io\""
+            buildConfigField "String", "REFRESH_ENDPOINT", "\"https://ad4d-31-134-188-195.ngrok.io\""
+        }
+        release {
+            buildConfigField "String", "ENDPOINT", "\"https://b1ca-31-134-188-195.ngrok.io\""
+            buildConfigField "String", "REFRESH_ENDPOINT", "\"http://192.168.0.158:8080\""
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation recyclerViewDep
+    implementation materialDep
+    implementation kotlinDep
+
+    implementation androidDep
+    implementation constraintDep
+
+    implementation navigationFragmentDep
+    implementation navigationUiDep
+
+    implementation daggerDep
+
+    implementation legacyDep
+
+    kapt daggerKapt
+    kapt metadataKapt
+
+    implementation okHttpDep
+    implementation okHttpLoggingDep
+    implementation retrofitDep
+    implementation retrofitAdapterDep
+    implementation rxJavaDep
+    implementation rxAndroidDep
+    implementation rxKotlinDep
+    implementation gsonConverterDep
+    implementation gsonDep
+
+    implementation timberDep
+
+    implementation eventBusDep
+    implementation lifecycleCommonDep
+
+    implementation securityDep
+
+    implementation coroutinesDep
+    implementation coroutinesAndroidDep
+
+    implementation coilDep
+    implementation matisseDep
+
+    implementation rxPermissionDep
+    implementation rxAndroid3Dep
+    implementation rxJava3Dep
+    implementation rxKotlin3Dep
+
+    implementation uploadServiceDep
+}
