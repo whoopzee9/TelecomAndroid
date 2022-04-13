@@ -71,6 +71,7 @@ class FeatureDataSourceImpl @Inject constructor(private val featureApiService: F
                 file.absolutePath,
                 "files"
             )
+            .setMaxRetries(5)
             .subscribe(requestObserver)
     }
 }

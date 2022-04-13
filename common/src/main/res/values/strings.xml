@@ -35,4 +35,5 @@
     <string name="create_code">Придумайте код</string>
     <string name="successful_login">Успешный вход!</string>
     <string name="wrong_code">Неверный код!</string>
+    <string name="retry">Повторить</string>
 </resources>

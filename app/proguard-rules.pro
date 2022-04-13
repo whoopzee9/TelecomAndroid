@@ -20,3 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keepclassmembers class * { public <init>(...); }
+-keep class net.gotev.uploadservice.** { *; }

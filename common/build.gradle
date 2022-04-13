@@ -20,8 +20,8 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "AUTHORITY", "\"ru.spbstu.telecom.provider\""
-            buildConfigField "String", "ENDPOINT", "\"http://192.168.0.158:8080\""
-            buildConfigField "String", "REFRESH_ENDPOINT", "\"https://8b7e-31-134-188-195.ngrok.io\""
+            buildConfigField "String", "ENDPOINT", "\"https://a307-31-134-188-195.ngrok.io\""
+            buildConfigField "String", "REFRESH_ENDPOINT", "\"https://ad4d-31-134-188-195.ngrok.io\""
         }
         release {
             buildConfigField "String", "ENDPOINT", "\"https://b1ca-31-134-188-195.ngrok.io\""

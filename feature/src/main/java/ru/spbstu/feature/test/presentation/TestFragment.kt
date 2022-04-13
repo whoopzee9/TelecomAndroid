@@ -168,9 +168,8 @@ class TestFragment : ToolbarFragment<TestViewModel>(
     private fun handleFilesUploadState(state: TestViewModel.FileUploadState) {
         when (state) {
             TestViewModel.FileUploadState.FileLoadedSuccess -> {
-                binding.frgTestProgressBar.visibility = View.VISIBLE
-                binding.frgTestProgressBar.progress = 100
-                binding.frgTestTvProgress.visibility = View.VISIBLE
+                binding.frgTestProgressBar.visibility = View.GONE
+                binding.frgTestTvProgress.visibility = View.GONE
                 Toast.makeText(requireContext(), R.string.file_uploaded, Toast.LENGTH_SHORT).show()
                 viewModel.getFilesNames(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS))
             }
@@ -183,8 +182,8 @@ class TestFragment : ToolbarFragment<TestViewModel>(
                 binding.frgTestTvProgress.visibility = View.VISIBLE
             }
             is TestViewModel.FileUploadState.Failure -> {
-                binding.frgTestProgressBar.visibility = View.VISIBLE
-                binding.frgTestTvProgress.visibility = View.VISIBLE
+                binding.frgTestProgressBar.visibility = View.GONE
+                binding.frgTestTvProgress.visibility = View.GONE
                 Toast.makeText(requireContext(), R.string.file_not_uploaded, Toast.LENGTH_SHORT)
                     .show()
             }
@@ -215,10 +214,11 @@ class TestFragment : ToolbarFragment<TestViewModel>(
                 val downloadRequest =
                     DownloadManager.Request(Uri.parse("${BuildConfig.ENDPOINT}/file/download/$it"))
                         .setAllowedOverMetered(true)
-                        .setTitle("Telecom")
+                        .setTitle("Скачивание файла")
                         .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
                         .setVisibleInDownloadsUi(false)
                         .setDestinationUri(file.toUri())
+
                 //.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, it)
                 val downloadId = downloadManager.enqueue(downloadRequest)
                 viewModel.setStates(it, true, true)
@@ -268,11 +268,9 @@ class TestFragment : ToolbarFragment<TestViewModel>(
                                 DownloadManager.STATUS_PENDING,
                                 DownloadManager.STATUS_RUNNING,
                                 DownloadManager.STATUS_PAUSED -> {
-                                    Log.d("qwerty", "progress")
                                     viewModel.setStates(fileName, true, true)
                                 }
                                 DownloadManager.STATUS_SUCCESSFUL -> {
-                                    Log.d("qwerty", "success")
                                     viewModel.setStates(fileName, false, true)
                                     this.cancel()
                                 }

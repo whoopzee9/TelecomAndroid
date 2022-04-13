@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.viewbinding.BuildConfig
 import net.gotev.uploadservice.UploadServiceConfig
+import net.gotev.uploadservice.data.RetryPolicyConfig
 import net.gotev.uploadservice.data.UploadElapsedTime
 import net.gotev.uploadservice.data.UploadInfo
 import net.gotev.uploadservice.data.UploadNotificationAction
@@ -18,6 +19,7 @@ import net.gotev.uploadservice.data.UploadNotificationConfig
 import net.gotev.uploadservice.data.UploadNotificationStatusConfig
 import net.gotev.uploadservice.data.UploadRate
 import net.gotev.uploadservice.extensions.getCancelUploadIntent
+import net.gotev.uploadservice.extensions.startNewUpload
 import net.gotev.uploadservice.placeholders.Placeholder
 import net.gotev.uploadservice.placeholders.PlaceholdersProcessor
 import ru.spbstu.common.di.CommonApi
@@ -90,7 +92,14 @@ open class App : Application(), FeatureContainer {
                     iconResourceID = ru.spbstu.common.R.drawable.ic_download_24,
                     iconColorResourceID = ContextCompat.getColor(context, ru.spbstu.common.R.color.background_primary),
                     largeIcon = BitmapFactory.decodeResource(resources, ru.spbstu.common.R.drawable.ic_download_24),
-                    message = getString(ru.spbstu.telecom.R.string.upload_error)
+                    message = getString(ru.spbstu.telecom.R.string.upload_error),
+//                    actions = arrayListOf(
+//                        UploadNotificationAction(
+//                            icon = R.drawable.ic_menu_close_clear_cancel,
+//                            title = getString(ru.spbstu.telecom.R.string.retry),
+//                            intent = context.startNewUpload()
+//                        )
+//                    )
                 ),
                 cancelled = UploadNotificationStatusConfig(
                     title = title,
@@ -146,6 +155,13 @@ open class App : Application(), FeatureContainer {
             }
 
         }
+        UploadServiceConfig.retryPolicy = RetryPolicyConfig(
+            initialWaitTimeSeconds = 10,
+            maxWaitTimeSeconds = 100,
+            multiplier = 2,
+            defaultMaxRetries = 3
+        )
+
     }
 
     override fun <T> getFeature(key: Class<*>): T {

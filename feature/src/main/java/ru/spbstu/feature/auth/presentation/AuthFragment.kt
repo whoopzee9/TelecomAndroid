@@ -22,6 +22,7 @@ import ru.spbstu.feature.R
 import ru.spbstu.feature.databinding.FragmentAuthBinding
 import ru.spbstu.feature.di.FeatureApi
 import ru.spbstu.feature.di.FeatureComponent
+import java.nio.charset.Charset
 import java.security.Key
 import java.security.KeyStore
 import javax.crypto.Cipher
@@ -150,8 +151,8 @@ class AuthFragment : BaseFragment<AuthViewModel>(
         val keyGenParameterSpec = KeyGenParameterSpec.Builder(
             KEY_NAME, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
         )
-            .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
             .setUserAuthenticationRequired(true)
             .setInvalidatedByBiometricEnrollment(false)
             .build()
@@ -178,8 +179,8 @@ class AuthFragment : BaseFragment<AuthViewModel>(
     private fun getCipher(): Cipher {
         val cipher = Cipher.getInstance(
             KeyProperties.KEY_ALGORITHM_AES + FORWARD_SLASH
-                    + KeyProperties.BLOCK_MODE_CBC + FORWARD_SLASH
-                    + KeyProperties.ENCRYPTION_PADDING_PKCS7
+                    + KeyProperties.BLOCK_MODE_GCM + FORWARD_SLASH
+                    + KeyProperties.ENCRYPTION_PADDING_NONE
         )
         cipher.init(Cipher.ENCRYPT_MODE, getSecretKey())
         return cipher
@@ -192,6 +193,16 @@ class AuthFragment : BaseFragment<AuthViewModel>(
             .setNegativeButtonText("Отмена")
             .setConfirmationRequired(false)
             .build()
+    }
+
+    private fun encryptData(plaintext: String, cipher: Cipher): ByteArray {
+        val ciphertext = cipher.doFinal(plaintext.toByteArray(Charset.forName("UTF-8")))
+        return ciphertext
+    }
+
+    private fun decryptData(ciphertext: ByteArray, cipher: Cipher): String {
+        val plaintext = cipher.doFinal(ciphertext)
+        return String(plaintext, Charset.forName("UTF-8"))
     }
 
     private fun onBiometricSuccess() {
